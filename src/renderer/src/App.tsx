@@ -2,6 +2,10 @@ import Versions from './components/Versions'
 import icons from './assets/icons.svg'
 
 function App(): JSX.Element {
+  const sendNotification = (): void => {
+    window.electron.notificationApi.sendNotification('My custom message')
+  }
+
   return (
     <div className="container">
       <Versions></Versions>
@@ -12,6 +16,7 @@ function App(): JSX.Element {
       <h2 className="hero-text">
         You{"'"}ve successfully created an Electron project with React and TypeScript
       </h2>
+      <button onClick={sendNotification}>Open DevTools</button>
       <p className="hero-tagline">
         Please try pressing <code>F12</code> to open the devTool
       </p>
