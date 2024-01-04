@@ -2,145 +2,154 @@ import Versions from './components/Versions'
 import icons from './assets/icons.svg'
 
 function App(): JSX.Element {
-  const sendNotification = (): void => {
-    window.electron.notificationApi.sendNotification('My custom message')
-  }
-
   return (
-    <div className="container">
-      <Versions></Versions>
-
-      <svg className="hero-logo" viewBox="0 0 900 300">
-        <use xlinkHref={`${icons}#electron`} />
-      </svg>
-      <h2 className="hero-text">
-        You{"'"}ve successfully created an Electron project with React and TypeScript
-      </h2>
-      <button onClick={sendNotification}>Open DevTools</button>
-      <p className="hero-tagline">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-
-      <div className="links">
-        <div className="link-item">
-          <a target="_blank" href="https://electron-vite.org" rel="noopener noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="link-item link-dot">•</div>
-        <div className="link-item">
-          <a
-            target="_blank"
-            href="https://github.com/alex8088/electron-vite"
-            rel="noopener noreferrer"
-          >
-            Getting Help
-          </a>
-        </div>
-        <div className="link-item link-dot">•</div>
-        <div className="link-item">
-          <a
-            target="_blank"
-            href="https://github.com/alex8088/quick-start/tree/master/packages/create-electron"
-            rel="noopener noreferrer"
-          >
-            create-electron
-          </a>
-        </div>
+    <div className="content-wrapper">
+      {/* ########## NAVBAR START ############ */}
+      <div className="chat-navbar">
+        <nav className="chat-navbar-inner">
+          <div className="chat-navbar-inner-left">
+            <a href="/" className="btn btn-outline-success ml-2">
+              Settings
+            </a>
+          </div>
+          <div className="chat-navbar-inner-right">
+            <span className="logged-in-user">Hi User</span>
+            <button onClick={() => {}} className="btn btn-sm btn-outline-danger ml-2">
+              Logout
+            </button>
+            <button onClick={() => {}} className="btn btn-sm btn-outline-success ml-2">
+              Login
+            </button>
+          </div>
+        </nav>
       </div>
-
-      <div className="features">
-        <div className="feature-item">
-          <article>
-            <h2 className="title">Configuring</h2>
-            <p className="detail">
-              Config with <span>electron.vite.config.ts</span> and refer to the{' '}
-              <a target="_blank" href="https://electron-vite.org/config" rel="noopener noreferrer">
-                config guide
-              </a>
-              .
-            </p>
-          </article>
+      {/* ########## NAVBAR END ############ */}
+      <div className="row no-gutters fh">
+        <div className="col-3 fh">
+          {/* ########## CHAT LIST START ############ */}
+          <div className="list-container">
+            <div className="chat-search-box">
+              <div className="input-group">
+                <input className="form-control" placeholder="Search" />
+              </div>
+            </div>
+            <ul className="items">
+              <li onClick={() => {}} className="item">
+                <div className="item-status">
+                  <img
+                    src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg"
+                    alt="Retail Admin"
+                  />
+                  <span className="status online"></span>
+                </div>
+                <p className="name-time">
+                  <span className="name mr-2">Some Chat 1</span>
+                </p>
+              </li>
+              <li onClick={() => {}} className="item">
+                <div className="item-status">
+                  <img
+                    src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg"
+                    alt="Retail Admin"
+                  />
+                  <span className="status online"></span>
+                </div>
+                <p className="name-time">
+                  <span className="name mr-2">Some Chat 2</span>
+                </p>
+              </li>
+              <li onClick={() => {}} className="item">
+                <div className="item-status">
+                  <img
+                    src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg"
+                    alt="Retail Admin"
+                  />
+                  <span className="status online"></span>
+                </div>
+                <p className="name-time">
+                  <span className="name mr-2">Some Chat 3</span>
+                </p>
+              </li>
+              <li onClick={() => {}} className="item">
+                <div className="item-status">
+                  <img
+                    src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg"
+                    alt="Retail Admin"
+                  />
+                  <span className="status online"></span>
+                </div>
+                <p className="name-time">
+                  <span className="name mr-2">Some Chat 4</span>
+                </p>
+              </li>
+            </ul>
+          </div>
+          {/* ########## CHAT LIST END ############ */}
         </div>
-        <div className="feature-item">
-          <article>
-            <h2 className="title">HMR</h2>
-            <p className="detail">
-              Edit <span>src/renderer</span> files to test HMR. See{' '}
-              <a
-                target="_blank"
-                href="https://electron-vite.org/guide/hmr.html"
-                rel="noopener noreferrer"
-              >
-                docs
-              </a>
-              .
-            </p>
-          </article>
-        </div>
-        <div className="feature-item">
-          <article>
-            <h2 className="title">Hot Reloading</h2>
-            <p className="detail">
-              Run{' '}
-              <span>
-                {"'"}electron-vite dev --watch{"'"}
-              </span>{' '}
-              to enable. See{' '}
-              <a
-                target="_blank"
-                href="https://electron-vite.org/guide/hot-reloading.html"
-                rel="noopener noreferrer"
-              >
-                docs
-              </a>
-              .
-            </p>
-          </article>
-        </div>
-        <div className="feature-item">
-          <article>
-            <h2 className="title">Debugging</h2>
-            <p className="detail">
-              Check out <span>.vscode/launch.json</span>. See{' '}
-              <a
-                target="_blank"
-                href="https://electron-vite.org/guide/debugging.html"
-                rel="noopener noreferrer"
-              >
-                docs
-              </a>
-              .
-            </p>
-          </article>
-        </div>
-        <div className="feature-item">
-          <article>
-            <h2 className="title">Source Code Protection</h2>
-            <p className="detail">
-              Supported via built-in plugin <span>bytecodePlugin</span>. See{' '}
-              <a
-                target="_blank"
-                href="https://electron-vite.org/guide/source-code-protection.html"
-                rel="noopener noreferrer"
-              >
-                docs
-              </a>
-              .
-            </p>
-          </article>
-        </div>
-        <div className="feature-item">
-          <article>
-            <h2 className="title">Packaging</h2>
-            <p className="detail">
-              Use{' '}
-              <a target="_blank" href="https://www.electron.build" rel="noopener noreferrer">
-                electron-builder
-              </a>{' '}
-              and pre-configured to pack your app.
-            </p>
-          </article>
+        <div className="col-9 fh">
+          {/* ########## CHAT NAME CONTAINER START ############ */}
+          <div className="chat-name-container">
+            <span className="name">Choose your channel</span>
+            <a href="/" className="btn btn-primary btn-sm back-button">
+              Back
+            </a>
+          </div>
+          {/* ########## CHAT NAME CONTAINER END ############ */}
+          <div className="container-fluid">
+            {/* ########## CHAT LIST START ############ */}
+            <div className="row mt-3">
+              {false && (
+                <div className="container-fluid">
+                  <div className="alert alert-warning">No chats to join :(</div>
+                </div>
+              )}
+              <div className="col-lg-3 col-md-6 mb-3">
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">Chat 1</h5>
+                    <p className="card-text">Some Chat 1 Description</p>
+                    <button onClick={() => {}} className="btn btn-outline-primary">
+                      Join Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-3 col-md-6 mb-3">
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">Chat 2</h5>
+                    <p className="card-text">Some Chat 2 Description</p>
+                    <button onClick={() => {}} className="btn btn-outline-primary">
+                      Join Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-3 col-md-6 mb-3">
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">Chat 3</h5>
+                    <p className="card-text">Some Chat 3 Description</p>
+                    <button onClick={() => {}} className="btn btn-outline-primary">
+                      Join Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-3 col-md-6 mb-3">
+                <div className="card">
+                  <div className="card-body">
+                    <h5 className="card-title">Chat 4</h5>
+                    <p className="card-text">Some Chat 4 Description</p>
+                    <button onClick={() => {}} className="btn btn-outline-primary">
+                      Join Chat
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* ########## CHAT LIST END ############ */}
+          </div>
         </div>
       </div>
     </div>
