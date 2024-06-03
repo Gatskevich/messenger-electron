@@ -1,10 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './assets/index.css'
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client';
 import App from './App'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.scss'
+
+createRoot(document.getElementById('chatApp') as HTMLElement).render(
+  <StrictMode>
     <App />
-  </React.StrictMode>
+  </StrictMode>
 )
