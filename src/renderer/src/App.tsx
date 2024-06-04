@@ -5,6 +5,9 @@ import {
 } from 'react-router-dom';
 import Home from './views/Home';
 import Navbar from './components/Navbar';
+import Settings from './views/Settings';
+import Login from './views/Login';
+import Register from './views/Register';
 
 function App() {
   return (
@@ -12,9 +15,9 @@ function App() {
       <Navbar />
       <div className='content-wrapper'>
         <Routes>
-          <Route path="/settings" element={<h1>I am Settings View</h1>} />
-          <Route path="/login" element={<h1>I am Login View</h1>} />
-          <Route path="/register" element={<h1>I am Register View</h1>} />
+          <Route path="/settings" element={<Settings/>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </div>
