@@ -16,7 +16,7 @@ function App() {
       <Navbar />
       <div className='content-wrapper'>
         <Routes>
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/:id" element={<Chat />} />
           <Route path="/settings" element={<Settings/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
