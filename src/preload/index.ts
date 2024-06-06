@@ -1,5 +1,6 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+const { ipcRenderer } = require('electron')
 
 // Custom APIs for renderer
 const api = {}
@@ -9,7 +10,14 @@ const api = {}
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
+    contextBridge.exposeInMainWorld('electron', {
+      ...electronAPI,
+      notificationApi: {
+        sendNotification: (message: string): void => {
+          ipcRenderer.send('notify', message)
+        }
+      }
+    })
     contextBridge.exposeInMainWorld('api', api)
   } catch (error) {
     console.error(error)
