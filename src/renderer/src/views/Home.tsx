@@ -1,8 +1,17 @@
+import { fetchChats } from "@renderer/api/chats";
 import AvailableChatsList from "@renderer/components/AvailableChatsList";
 import JoinedChatsList from "@renderer/components/JoinedChatsList";
 import ViewTitle from "@renderer/components/shared/ViewTitle";
+import { useEffect } from "react";
 
 export default function Home() {
+
+  useEffect(() => {
+    fetchChats().then(chats => {
+      console.log(chats);
+    });
+  }, [])
+
   return (
     <div className="row g-0 fh">
       <div className="col-3 fh">
