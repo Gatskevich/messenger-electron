@@ -26,7 +26,7 @@ export default function Navbar() {
             Register
           </button>
           <Link
-            to="/login"
+            to="/"
             className="btn btn-outline-success ms-2">Login</Link>
         </div>
       </nav>

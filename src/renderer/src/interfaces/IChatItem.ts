@@ -1,4 +1,4 @@
-export interface ChatItem {
+export interface IChatItem {
   id: string
   admin: string
   description: string
