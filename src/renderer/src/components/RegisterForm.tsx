@@ -1,11 +1,24 @@
+import { registerUser } from "@renderer/actions/auth";
 import { IRegisterFormInput } from "@renderer/interfaces/IRegisterFormInput";
+import { AppDispatch, RootState } from "@renderer/store";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import LoadingView from "./shared/LoadingView/LoadingView";
 
 export default function RegisterForm() {
   const { register, handleSubmit } = useForm<IRegisterFormInput>();
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const error = useSelector(({auth}: RootState) => auth.register.error)
+  const isChecking = useSelector(({auth}: RootState) => auth.register.isChecking);
+
   const onSubmit = (data: IRegisterFormInput) => {
-    alert(JSON.stringify(data));
+    dispatch(registerUser(data))
+  }
+
+  if (isChecking) {
+    return <LoadingView />
   }
 
   return (
@@ -52,7 +65,7 @@ export default function RegisterForm() {
           className="form-control"
           id="password" />
       </div>
-      { false && <div className="alert alert-danger small">Some Error</div>}
+      { error && <div className="alert alert-danger small mt-3">{error.message}</div>}
       <button type="submit" className="btn btn-outline-primary mt-3">Register</button>
     </div>
   </form>

@@ -10,8 +10,15 @@ import Chat from './views/Chat';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import Welcome from './views/Welcom';
+import { listenToAuthChanges } from './actions/auth';
+import { useEffect } from 'react';
 
 function App() {
+
+  useEffect(() => {
+    store.dispatch(listenToAuthChanges());
+  }, [])
+
   return (
     <Provider store={store}>
       <Router>

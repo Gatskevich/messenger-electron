@@ -1,11 +1,23 @@
+import { loginUser } from "@renderer/actions/auth";
 import { ILoginFormInput } from "@renderer/interfaces/ILoginFormInput";
+import { AppDispatch, RootState } from "@renderer/store";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import LoadingView from "./shared/LoadingView/LoadingView";
 
 export default function LoginForm() {
   const { register, handleSubmit } = useForm<ILoginFormInput>();
 
+  const dispatch = useDispatch<AppDispatch>();
+  const error = useSelector(({auth}: RootState) => auth.login.error)
+  const isChecking = useSelector(({auth}: RootState) => auth.login.isChecking);
+
   const onSubmit = (data: ILoginFormInput) => {
-    alert(JSON.stringify(data));
+    dispatch(loginUser(data))
+  }
+
+  if (isChecking) {
+    return <LoadingView />
   }
 
   return (
@@ -33,7 +45,7 @@ export default function LoginForm() {
             className="form-control"
             id="password" />
         </div>
-        { false && <div className="alert alert-danger small">Some error</div>}
+        { error && <div className="alert alert-danger small mt-3">{error.message}</div>}
         <button type="submit" className="btn btn-outline-primary mt-3">Login</button>
       </div>
     </form>
