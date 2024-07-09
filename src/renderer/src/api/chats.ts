@@ -1,11 +1,11 @@
-import { ChatItem } from '@renderer/interfaces/ChatItem'
+import { IChatItem } from '@renderer/interfaces/IChatItem'
 import db from '../db/firestore'
-import { DocumentData, collection, getDocs } from 'firebase/firestore/lite'
+import { DocumentData, collection, getDocs } from 'firebase/firestore'
 
 export const fetchChats = async () => {
   const chatsCol = collection(db, 'chats')
   const chatsSnapshot = await getDocs(chatsCol)
-  const chatList: ChatItem[] = chatsSnapshot.docs.map((doc) => {
+  const chatList: IChatItem[] = chatsSnapshot.docs.map((doc) => {
     const data = doc.data() as DocumentData
 
     return {

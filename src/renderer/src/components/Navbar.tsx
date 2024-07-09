@@ -1,33 +1,41 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { logout } from '@renderer/actions/auth';
+import { AppDispatch, RootState } from '@renderer/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import BackButton from './shared/BackButton';
 
-export default function Navbar() {
-  const navigate = useNavigate();
+export interface NavbarProps {
+  canGoBack?: boolean;
+  view?: string
+}
+
+export default function Navbar({ canGoBack, view }: NavbarProps) {
+  const dispatch = useDispatch<AppDispatch>();
+  const user = useSelector(({auth}: RootState) => auth.user)
 
   return (
     <div className="chat-navbar">
       <nav className="chat-navbar-inner">
         <div className="chat-navbar-inner-left">
-          <button
-            onClick={() => navigate(-1)}
-            className="btn btn-outline-primary"
-          >
-            Back
-          </button>
-          <Link
-            to="/settings"
-            className="btn btn-outline-success ms-2">Settings</Link>
+          { canGoBack && <BackButton /> }
+          { view !== 'Settings' &&
+            <Link
+              to="/settings"
+              className="btn btn-outline-success ml-2">Settings
+            </Link>
+          }
         </div>
         <div className="chat-navbar-inner-right">
-          <span className="logged-in-user">Hi User</span>
-          <button
-            onClick={() => navigate('/register')}
-            className="btn btn-outline-danger ms-2"
-          >
-            Register
-          </button>
-          <Link
-            to="/login"
-            className="btn btn-outline-success ms-2">Login</Link>
+          { user &&
+              <>
+              <img className="avatar me-2" src={user.avatar}></img>
+              <span className="logged-in-user">Hi, {user.username}</span>
+              <button
+                onClick={() => dispatch(logout())}
+                className="btn btn-outline-danger ms-4">Logout
+              </button>
+            </>
+          }
         </div>
       </nav>
     </div>

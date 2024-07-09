@@ -6,8 +6,8 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
     http-equiv="Content-Security-Policy"
-    content="default-src 'self'; connect-src 'self' https://firestore.googleapis.com; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https://banner2.cleanpng.com;"
-  />
+    content="default-src 'self'; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src * data: blob:;"
+    />
   </head>
   <body>
     <div id="chatApp"></div>

@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, Notification, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -44,23 +44,12 @@ app.whenReady().then(() => {
 
   createWindow()
 
-  const notification = new Notification({
-    title: 'Electron',
-    body: 'Hello, World!'
-  })
-  notification.show()
-
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
 })
 
-ipcMain.on('notify', (e, message: string) => {
-  new Notification({
-    title: 'Electron',
-    body: message
-  }).show()
-})
+ipcMain.on('notify', (e, message: string) => {})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

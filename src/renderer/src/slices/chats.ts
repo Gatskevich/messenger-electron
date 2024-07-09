@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { getChats } from '../actions/chats'
-import { ChatItem } from '../interfaces/ChatItem'
+import { IChatItem } from '../interfaces/IChatItem'
 
 export interface ChatState {
-  items: ChatItem[]
+  items: IChatItem[]
   loading: boolean
   error: string | null
 }

@@ -1,7 +1,7 @@
-import { ChatItem } from "@renderer/interfaces/ChatItem"
+import { IChatItem } from "@renderer/interfaces/IChatItem"
 
 interface AvailableChatsListProps {
-  chats: ChatItem[];
+  chats: IChatItem[];
 }
 
 export default function AvailableChatsList({ chats }: AvailableChatsListProps) {

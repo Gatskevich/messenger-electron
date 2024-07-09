@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import ChatSearch from './ChatSearch';
-import { ChatItem } from "@renderer/interfaces/ChatItem"
+import { IChatItem } from "@renderer/interfaces/IChatItem"
 
 interface JoinedChatsListProps {
-  chats: ChatItem[];
+  chats: IChatItem[];
 }
 
 export default function JoinedChatsList({ chats }: JoinedChatsListProps) {
