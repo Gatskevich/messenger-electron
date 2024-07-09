@@ -5,8 +5,9 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { getChats } from '../actions/chats';
 import { AppDispatch, RootState } from "@renderer/store";
+import { withBaseLayout } from "@renderer/layouts/Base";
 
-export default function Home() {
+function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const chats = useSelector(({chats}: RootState) => {
     return chats.items
@@ -28,3 +29,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default withBaseLayout(Home);

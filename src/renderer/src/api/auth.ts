@@ -22,17 +22,22 @@ export const getUserProfile = async (id: string): Promise<IUserProfile> => {
   return getDoc(userDoc).then((snapshot) => snapshot.data() as IUserProfile)
 }
 
-export const login = ({ email, password }: ILoginFormInput) => {
+export const login = async ({ email, password }: ILoginFormInput) => {
   const auth = getAuth()
+  const { user } = await signInWithEmailAndPassword(auth, email, password)
+  const userProfile = await getUserProfile(user.uid)
 
-  return signInWithEmailAndPassword(auth, email, password)
+  return userProfile
 }
 
 export const register = async ({ email, password, username, avatar }: IRegisterFormInput) => {
   const auth = getAuth()
   const { user } = await createUserWithEmailAndPassword(auth, email, password)
+  const userProfile = { id: user.uid, username, email, avatar, joinedChats: [] }
 
-  return await createUserProfile({ id: user.uid, username, email, avatar, joinedChats: [] })
+  await createUserProfile(userProfile)
+
+  return userProfile
 }
 
 export const onAuthStateChanges = (onAuth) => {

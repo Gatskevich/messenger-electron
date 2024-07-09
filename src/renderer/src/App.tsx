@@ -1,33 +1,62 @@
 import {
   HashRouter as Router,
   Routes,
-  Route
+  Route,
+  Navigate
 } from 'react-router-dom';
 import Home from './views/Home';
-import Navbar from './components/Navbar';
 import Settings from './views/Settings';
 import Chat from './views/Chat';
-import { Provider } from 'react-redux';
-import { store } from './store';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState, store } from './store';
 import Welcome from './views/Welcom';
 import { listenToAuthChanges } from './actions/auth';
 import { useEffect } from 'react';
+import LoadingView from './components/shared/LoadingView/LoadingView';
+
+function AuthRoute({children}) {
+  const user = useSelector(({auth}: RootState) => auth.user)
+
+  if (!user) {
+    return <Navigate to="/" />;
+  }
+
+  return children
+
+}
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
+  const isChecking = useSelector(({auth}: RootState) => auth.isChecking)
 
   useEffect(() => {
-    store.dispatch(listenToAuthChanges());
-  }, [])
+    dispatch(listenToAuthChanges());
+  }, [dispatch])
+
+  if (isChecking) {
+    return <LoadingView />
+  }
 
   return (
     <Provider store={store}>
       <Router>
-        <Navbar />
         <div className='content-wrapper'>
           <Routes>
-            <Route path="/chat/:id" element={<Chat />} />
-            <Route path="/settings" element={<Settings/>} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/chat/:id" element={
+              <AuthRoute>
+                <Chat />
+              </AuthRoute>
+            } />
+            <Route path="/settings" element={
+              <AuthRoute>
+                <Settings />
+              </AuthRoute>
+            } />
+            <Route path="/home" element={
+              <AuthRoute>
+                <Home />
+              </AuthRoute>
+            } />
             <Route path="/" element={<Welcome />} />
           </Routes>
         </div>

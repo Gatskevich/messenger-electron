@@ -53,8 +53,9 @@ export const authSlice = createSlice({
         state.register.isChecking = true
         state.register.error = null
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.register.isChecking = false
+        state.user = action.payload
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.register.isChecking = false
@@ -65,8 +66,9 @@ export const authSlice = createSlice({
         state.login.isChecking = true
         state.login.error = null
       })
-      .addCase(loginUser.fulfilled, (state) => {
+      .addCase(loginUser.fulfilled, (state, action) => {
         state.login.isChecking = false
+        state.user = action.payload
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.login.isChecking = false

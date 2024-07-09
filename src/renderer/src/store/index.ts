@@ -13,4 +13,5 @@ export type RootState = {
   chats: ChatState
   auth: AuthState
 }
+
 export type AppDispatch = typeof store.dispatch

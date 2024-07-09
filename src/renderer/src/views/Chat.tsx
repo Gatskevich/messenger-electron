@@ -2,8 +2,9 @@ import ChatUserList from '../components/ChatUserList';
 import ChatMessagesList from '../components/ChatMessagesList';
 import ViewTitle from '../components/shared/ViewTitle';
 import { useParams } from 'react-router-dom';
+import { withBaseLayout } from '@renderer/layouts/Base';
 
-export default function Chat() {
+function Chat() {
   const { id } = useParams();
 
   return (
@@ -18,3 +19,5 @@ export default function Chat() {
     </div>
   )
 }
+
+export default  withBaseLayout(Chat, { canGoBack: true });
