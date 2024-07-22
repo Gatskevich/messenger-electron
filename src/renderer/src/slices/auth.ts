@@ -1,11 +1,5 @@
-import { createSlice, isAnyOf } from '@reduxjs/toolkit'
-import {
-  listenToAuthChangesFulfilled,
-  listenToAuthChangesPending,
-  listenToAuthChangesRejected,
-  loginUser,
-  registerUser
-} from '@renderer/actions/auth'
+import { createSlice } from '@reduxjs/toolkit'
+import { loginUser, registerUser } from '@renderer/actions/auth'
 import { IUserProfile } from '@renderer/interfaces/IUserProfile'
 import { IFirebaseError } from '@renderer/interfaces/IFirebaseError'
 import { IAuth } from '@renderer/interfaces/IAuth'
