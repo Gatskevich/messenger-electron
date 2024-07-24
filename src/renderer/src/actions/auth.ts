@@ -30,9 +30,9 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 })
 
 // Dispatching auth changes
-export const listenToAuthChanges = () => async (dispatch: AppDispatch) => {
+export const listenToAuthChanges = () => (dispatch: AppDispatch) => {
   dispatch(listenToAuthChangesPending())
-  api.onAuthStateChanges(async (authUser) => {
+  return api.onAuthStateChanges(async (authUser) => {
     if (authUser) {
       const userProfile = await api.getUserProfile(authUser.uid)
       dispatch(listenToAuthChangesFulfilled(userProfile))

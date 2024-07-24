@@ -13,6 +13,7 @@ import Welcome from './views/Welcom';
 import { listenToAuthChanges } from './actions/auth';
 import { useEffect } from 'react';
 import LoadingView from './components/shared/LoadingView/LoadingView';
+import { listenToConnectionChanges } from './actions/app';
 
 function AuthRoute({children}) {
   const user = useSelector(({auth}: RootState) => auth.user)
@@ -28,10 +29,21 @@ function AuthRoute({children}) {
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   const isChecking = useSelector(({auth}: RootState) => auth.isChecking)
+  const isOnline = useSelector(({app}: RootState) => app.isOnline);
 
   useEffect(() => {
-    dispatch(listenToAuthChanges());
-  }, [dispatch])
+    const unsubFromAuth = dispatch(listenToAuthChanges());
+    const unsubFromConnection = dispatch(listenToConnectionChanges());
+
+    return () => {
+      unsubFromAuth();
+      unsubFromConnection();
+    }
+  }, [dispatch]);
+
+  if (!isOnline) {
+    return <LoadingView message="Application has been disconnected from the internet. Please reconnect..." />
+  }
 
   if (isChecking) {
     return <LoadingView />
