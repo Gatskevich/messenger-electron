@@ -14,6 +14,7 @@ import { listenToAuthChanges } from './actions/auth';
 import { useEffect } from 'react';
 import LoadingView from './components/shared/LoadingView/LoadingView';
 import { listenToConnectionChanges } from './actions/app';
+import ChatCreate from './views/ChatCreate';
 
 function AuthRoute({children}) {
   const user = useSelector(({auth}: RootState) => auth.user)
@@ -54,6 +55,11 @@ function App() {
       <Router>
         <div className='content-wrapper'>
           <Routes>
+            <Route path="/chatCreate" element={
+              <AuthRoute>
+                <ChatCreate />
+              </AuthRoute>
+            } />
             <Route path="/chat/:id" element={
               <AuthRoute>
                 <Chat />

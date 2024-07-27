@@ -13,7 +13,9 @@ function Chat() {
         <ChatUserList />
       </div>
       <div className="col-9 fh">
-        <ViewTitle text={`Joined channel: ${id}`} />
+        <ViewTitle text={`Joined channel: ${id}`} >
+
+        </ViewTitle>
         <ChatMessagesList />
       </div>
     </div>

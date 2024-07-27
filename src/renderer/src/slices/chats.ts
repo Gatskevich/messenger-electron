@@ -1,15 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { getChats } from '../actions/chats'
-import { IChatItem } from '../interfaces/IChatItem'
+import { IChat } from '@renderer/interfaces/IChat'
 
 export interface ChatState {
-  items: IChatItem[]
+  joined: IChat[]
+  available: IChat[]
   loading: boolean
   error: string | null
 }
 
 const initialState: ChatState = {
-  items: [],
+  joined: [],
+  available: [],
   loading: false,
   error: null as string | null
 }
@@ -17,7 +19,19 @@ const initialState: ChatState = {
 export const chatSlice = createSlice({
   name: 'chat',
   initialState,
-  reducers: {},
+  reducers: {
+    createChatFulfilled: (state) => {},
+    joinToChatFulfilled: (state, action) => {
+      console.log('action.payload')
+      console.log(action.payload)
+      state.joined = [...state.joined, action.payload]
+      state.available = state.available.filter((chat) => chat.id !== action.payload.id)
+    },
+    clearChatsFulfilled: (state) => {
+      state.joined = []
+      state.available = []
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getChats.pending, (state) => {
@@ -25,7 +39,8 @@ export const chatSlice = createSlice({
         state.error = null
       })
       .addCase(getChats.fulfilled, (state, action) => {
-        state.items = action.payload
+        state.joined = action.payload.joined
+        state.available = action.payload.available
         state.loading = false
       })
       .addCase(getChats.rejected, (state, action) => {
