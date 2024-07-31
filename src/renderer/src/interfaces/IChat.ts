@@ -4,5 +4,5 @@ export interface IChat {
   description: string
   image: any
   admin: string
-  joinedUsers?: string[]
+  joinedUserIds?: string[]
 }

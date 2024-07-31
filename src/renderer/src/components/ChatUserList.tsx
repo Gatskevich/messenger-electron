@@ -1,4 +1,10 @@
-export default function ChatUserList() {
+import { IUserProfile } from "@renderer/interfaces/IUserProfile"
+
+interface ChatUserListProps {
+  users?: IUserProfile[]
+}
+
+export default function ChatUserList({users = []}: ChatUserListProps) {
   return(
     <div className="list-container">
       <div className="chat-search-box">
@@ -7,50 +13,22 @@ export default function ChatUserList() {
         </div>
       </div>
       <ul className="items">
-        <li
-          onClick={() => {}}
-          className="item">
-          <div className="item-status">
-            <img src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg" alt="Retail Admin" />
-            <span className="status online"></span>
-          </div>
-          <p className="name-time">
-          <span className="name mr-2">Some User 1</span>
-          </p>
-        </li>
-        <li
-          onClick={() => {}}
-          className="item">
-          <div className="item-status">
-            <img src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg" alt="Retail Admin" />
-            <span className="status online"></span>
-          </div>
-          <p className="name-time">
-          <span className="name mr-2">Some User 2</span>
-          </p>
-        </li>
-        <li
-          onClick={() => {}}
-          className="item">
-          <div className="item-status">
-            <img src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg" alt="Retail Admin" />
-            <span className="status online"></span>
-          </div>
-          <p className="name-time">
-          <span className="name mr-2">Some User 3</span>
-          </p>
-        </li>
-        <li
-          onClick={() => {}}
-          className="item">
-          <div className="item-status">
-            <img src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg" alt="Retail Admin" />
-            <span className="status online"></span>
-          </div>
-          <p className="name-time">
-          <span className="name mr-2">Some User 4</span>
-          </p>
-        </li>
+        { users.map(user => (
+           <li
+            key={user.id}
+            className="item">
+            <div className="item-status">
+              <img
+                src={user.avatar}
+                alt="Retail Admin" />
+              <span className="status online"></span>
+            </div>
+            <p className="name-time">
+            <span className="name mr-2">{user.username}</span>
+            </p>
+          </li>
+        ))
+        }
       </ul>
     </div>
   )

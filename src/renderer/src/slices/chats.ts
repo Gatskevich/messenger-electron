@@ -1,10 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { getChats } from '../actions/chats'
 import { IChat } from '@renderer/interfaces/IChat'
+import { IActiveChats } from '@renderer/interfaces/IActiveChats'
 
 export interface ChatState {
   joined: IChat[]
   available: IChat[]
+  activeChats: IActiveChats
   loading: boolean
   error: string | null
 }
@@ -12,6 +14,7 @@ export interface ChatState {
 const initialState: ChatState = {
   joined: [],
   available: [],
+  activeChats: {},
   loading: false,
   error: null as string | null
 }
@@ -22,14 +25,15 @@ export const chatSlice = createSlice({
   reducers: {
     createChatFulfilled: (state) => {},
     joinToChatFulfilled: (state, action) => {
-      console.log('action.payload')
-      console.log(action.payload)
       state.joined = [...state.joined, action.payload]
       state.available = state.available.filter((chat) => chat.id !== action.payload.id)
     },
     clearChatsFulfilled: (state) => {
       state.joined = []
       state.available = []
+    },
+    setActiveChat: (state, action) => {
+      state.activeChats[action.payload.id] = action.payload
     }
   },
   extraReducers: (builder) => {
