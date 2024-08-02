@@ -6,7 +6,7 @@ export default function BackButton() {
   return (
     <button
       onClick={() => navigate(-1)}
-      className="btn btn-outline-primary">Back
+      className="btn btn-outline-primary me-2">Back
     </button>
   )
 }

@@ -4,6 +4,7 @@ import { IRegisterFormInput } from '@renderer/interfaces/IRegisterFormInput'
 import { IUserProfile } from '@renderer/interfaces/IUserProfile'
 import { AppDispatch } from '@renderer/store'
 import { ILoginFormInput } from '@renderer/interfaces/ILoginFormInput'
+import { clearChatsFulfilled } from './chats'
 
 // Common actions
 export const listenToAuthChangesPending = createAction('auth/listenToAuthChangesPending')
@@ -11,6 +12,7 @@ export const listenToAuthChangesFulfilled = createAction<IUserProfile | null>(
   'auth/listenToAuthChangesFulfilled'
 )
 export const listenToAuthChangesRejected = createAction('auth/listenToAuthChangesRejected')
+export const logoutFulfilled = createAction('auth/logout')
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
@@ -25,10 +27,6 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (formData: ILo
   return user
 })
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  return api.logout()
-})
-
 // Dispatching auth changes
 export const listenToAuthChanges = () => (dispatch: AppDispatch) => {
   dispatch(listenToAuthChangesPending())
@@ -40,4 +38,10 @@ export const listenToAuthChanges = () => (dispatch: AppDispatch) => {
       dispatch(listenToAuthChangesRejected())
     }
   })
+}
+
+export const logout = () => async (dispatch: AppDispatch) => {
+  await api.logout()
+  dispatch(logoutFulfilled())
+  dispatch(clearChatsFulfilled())
 }

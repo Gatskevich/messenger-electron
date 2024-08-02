@@ -14,6 +14,9 @@ import { listenToAuthChanges } from './actions/auth';
 import { useEffect } from 'react';
 import LoadingView from './components/shared/LoadingView/LoadingView';
 import { listenToConnectionChanges } from './actions/app';
+import ChatCreate from './views/ChatCreate';
+import { checkUserConnection } from './actions/connections';
+import { setUserOnlineStatus } from './api/connections';
 
 function AuthRoute({children}) {
   const user = useSelector(({auth}: RootState) => auth.user)
@@ -28,8 +31,10 @@ function AuthRoute({children}) {
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
+
   const isChecking = useSelector(({auth}: RootState) => auth.isChecking)
   const isOnline = useSelector(({app}: RootState) => app.isOnline);
+  const user = useSelector(({auth}: RootState) => auth.user);
 
   useEffect(() => {
     const unsubFromAuth = dispatch(listenToAuthChanges());
@@ -40,6 +45,22 @@ function App() {
       unsubFromConnection();
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    let unsubFromUserConnection;
+    if (user?.id) {
+      unsubFromUserConnection = dispatch(checkUserConnection(user.id));
+    }
+
+    return () => {
+      if (unsubFromUserConnection) {
+        unsubFromUserConnection();
+        if (user?.id) {
+          setUserOnlineStatus(user.id, false);
+        }
+      }
+    }
+  }, [dispatch, user])
 
   if (!isOnline) {
     return <LoadingView message="Application has been disconnected from the internet. Please reconnect..." />
@@ -54,6 +75,11 @@ function App() {
       <Router>
         <div className='content-wrapper'>
           <Routes>
+            <Route path="/chatCreate" element={
+              <AuthRoute>
+                <ChatCreate />
+              </AuthRoute>
+            } />
             <Route path="/chat/:id" element={
               <AuthRoute>
                 <Chat />

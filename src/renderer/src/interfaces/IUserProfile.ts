@@ -3,5 +3,7 @@ export interface IUserProfile {
   email: string
   username: string
   avatar: any
+  state?: boolean
+  lastChanged?: string | Date
   joinedChats: string[]
 }

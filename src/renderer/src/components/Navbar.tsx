@@ -21,7 +21,7 @@ export default function Navbar({ canGoBack, view }: NavbarProps) {
           { view !== 'Settings' &&
             <Link
               to="/settings"
-              className="btn btn-outline-success ml-2">Settings
+              className="btn btn-outline-success">Settings
             </Link>
           }
         </div>
