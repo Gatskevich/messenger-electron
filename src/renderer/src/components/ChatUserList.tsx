@@ -21,7 +21,7 @@ export default function ChatUserList({users = []}: ChatUserListProps) {
               <img
                 src={user.avatar}
                 alt="Retail Admin" />
-              <span className="status online"></span>
+              <span className={`status ${user.state}`}></span>
             </div>
             <p className="name-time">
             <span className="name mr-2">{user.username}</span>

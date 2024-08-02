@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 
 function Home() {
   const dispatch = useDispatch<AppDispatch>();
+
   const user = useSelector(({auth}: RootState) => auth.user);
   const availableChats = useSelector(({chats}: RootState) => {
     return chats.available

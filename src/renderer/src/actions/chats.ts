@@ -8,13 +8,16 @@ import { IUserProfile } from '@renderer/interfaces/IUserProfile'
 import { ISortedChats } from '@renderer/interfaces/ISortedChats'
 import { IChat } from '@renderer/interfaces/IChat'
 import { IActiveChat } from '@renderer/interfaces/IActiveChat'
+import { IUpdateChatUserState } from '@renderer/interfaces/IUpdateChatUserState'
 
 // Common actions
 export const createChatFulfilled = createAction('chat/createChatFulfilled')
 export const joinToChatFulfilled = createAction<IChat>('chat/joinToChatFulfilled')
 export const clearChatsFulfilled = createAction('chat/clearChatsFulfilled')
-export const subscribeToChatFulfilled = createAction<IActiveChat>('chat/setActiveChat')
-export const updateUserStateFulfilled = createAction<IUserProfile>('chat/updateUserState')
+export const subscribeToChatFulfilled = createAction<IActiveChat>('chat/setActiveChatFulfilled')
+export const updateUserStateFulfilled = createAction<IUpdateChatUserState>(
+  'chat/updateUserStateFulfilled'
+)
 
 export const getChats = createAsyncThunk('chat/getChats', async (user: IUserProfile | null) => {
   if (!user) {
@@ -25,6 +28,7 @@ export const getChats = createAsyncThunk('chat/getChats', async (user: IUserProf
   }
 
   const chats = await api.fetchChats()
+
   const sortedChats = chats.reduce(
     (accuChats: ISortedChats, chat) => {
       accuChats[chat.joinedUserIds?.includes(user.id) ? 'joined' : 'available'].push(chat)
@@ -77,8 +81,8 @@ export const subscribeToChat = (chatId: string) => (dispatch: AppDispatch) => {
   })
 }
 
-export const subscribeToProfile = (id: string) => (dispatch: AppDispatch) => {
+export const subscribeToProfile = (id: string, chatId: string) => (dispatch: AppDispatch) => {
   return api.subscribeToProfile(id, async (user) => {
-    dispatch(updateUserStateFulfilled(user))
+    dispatch(updateUserStateFulfilled({ user, chatId }))
   })
 }

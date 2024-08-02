@@ -12,6 +12,7 @@ function ChatCreate() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
+
   const user = useSelector(({auth}: RootState) => auth.user);
 
   const onSubmit = (data: IChatFormInput) => {

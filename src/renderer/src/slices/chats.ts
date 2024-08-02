@@ -32,8 +32,25 @@ export const chatSlice = createSlice({
       state.joined = []
       state.available = []
     },
-    setActiveChat: (state, action) => {
+    setActiveChatFulfilled: (state, action) => {
       state.activeChats[action.payload.id] = action.payload
+    },
+    updateUserStateFulfilled: (state, action) => {
+      const { user, chatId } = action.payload
+      const chat = state.activeChats[chatId]
+
+      if (chat) {
+        const joinedUsers = chat.joinedUsers
+        if (joinedUsers) {
+          const index = joinedUsers.findIndex((joinedUser) => joinedUser.id === user.id)
+
+          if (index >= 0) {
+            if (joinedUsers[index].state !== user.state) {
+              joinedUsers[index].state = user.state
+            }
+          }
+        }
+      }
     }
   },
   extraReducers: (builder) => {

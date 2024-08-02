@@ -15,6 +15,7 @@ import { IUserProfile } from '@renderer/interfaces/IUserProfile'
 export const fetchChats = async () => {
   const chatsCol = collection(db, 'chats')
   const chatsSnapshot = await getDocs(chatsCol)
+
   const chatList: IChat[] = chatsSnapshot.docs.map((doc) => {
     const data = doc.data() as DocumentData
 

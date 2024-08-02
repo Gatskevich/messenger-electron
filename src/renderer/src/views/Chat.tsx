@@ -5,9 +5,11 @@ import { useParams } from 'react-router-dom';
 import { withBaseLayout } from '@renderer/layouts/Base';
 import { AppDispatch, RootState } from '@renderer/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { subscribeToChat, subscribeToProfile } from '@renderer/actions/chats';
 import { IUserProfile } from '@renderer/interfaces/IUserProfile';
+import LoadingView from '@renderer/components/shared/LoadingView/LoadingView';
+import Messenger from '@renderer/components/Messenger';
 
 function Chat() {
   const { id } = useParams();
@@ -15,7 +17,25 @@ function Chat() {
   const peopleWatchers = useRef({});
 
   const dispatch = useDispatch<AppDispatch>();
+
   const activeChat = useSelector(({chats}: RootState) => chats.activeChats[id || ""])
+
+  const subscribeToJoinedUsers = useCallback((joinedUsers: IUserProfile[]) => {
+    joinedUsers.forEach(user => {
+      if(!peopleWatchers.current[user.id]) {
+        peopleWatchers.current[user.id] = dispatch(subscribeToProfile(user.id, id || ""))
+      }
+    })
+  }, [dispatch, id])
+
+  const unsubFromJoinedUsers = useCallback(() => {
+    Object.keys(peopleWatchers.current)
+      .forEach(id => peopleWatchers.current[id]())
+  }, [peopleWatchers.current])
+
+  const sendMessage = (message: string) => {
+    alert(message);
+  }
 
   useEffect(() => {
     const unsubFromChat = dispatch(subscribeToChat(id || ""));
@@ -30,17 +50,8 @@ function Chat() {
     activeChat?.joinedUsers && subscribeToJoinedUsers(activeChat.joinedUsers);
   }, [activeChat?.joinedUsers])
 
-  const subscribeToJoinedUsers = (joinedUsers: IUserProfile[]) => {
-    joinedUsers.forEach(user => {
-      if(!peopleWatchers.current[user.id]) {
-        peopleWatchers.current[user.id] = dispatch(subscribeToProfile(user.id))
-      }
-    })
-  }
-
-  const unsubFromJoinedUsers = () => {
-    Object.keys(peopleWatchers.current)
-      .forEach(id => peopleWatchers.current[id]())
+  if (!activeChat?.id) {
+    return <LoadingView message="Loading Chat..." />
   }
 
   return (
@@ -48,9 +59,10 @@ function Chat() {
       <div className="col-3 fh">
         <ChatUserList users={activeChat?.joinedUsers} />
       </div>
-      <div className="col-9 fh">
+      <div className="col-9 fh position-relative">
         <ViewTitle text={`Channel ${activeChat?.name}`} />
         <ChatMessagesList />
+        <Messenger onSubmit={sendMessage} />
       </div>
     </div>
   )

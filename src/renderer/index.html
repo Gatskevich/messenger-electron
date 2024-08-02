@@ -5,9 +5,14 @@
     <title>Electron</title>
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
-    http-equiv="Content-Security-Policy"
-    content="default-src 'self'; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src * data: blob:;"
-    />
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com wss://messenger-electron-default-rtdb.firebaseio.com wss://s-euw1c-nss-2206.europe-west1.firebasedatabase.app wss://messenger-electron-default-rtdb.europe-west1.firebasedatabase.app;
+               script-src 'self' 'unsafe-inline' https://messenger-electron-default-rtdb.firebaseio.com https://messenger-electron-default-rtdb.europe-west1.firebasedatabase.app https://s-euw1c-nss-2206.europe-west1.firebasedatabase.app;
+               style-src 'self' 'unsafe-inline';
+               img-src * data: blob:;
+               frame-src 'self' https://s-euw1c-nss-2206.europe-west1.firebasedatabase.app;"
+               />
   </head>
   <body>
     <div id="chatApp"></div>
