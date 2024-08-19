@@ -6,11 +6,13 @@ import {
   doc,
   getDocs,
   onSnapshot,
+  query,
   setDoc,
   updateDoc
 } from 'firebase/firestore'
 import { IChat } from '@renderer/interfaces/IChat'
 import { IUserProfile } from '@renderer/interfaces/IUserProfile'
+import { IMessage } from '@renderer/interfaces/IMessage'
 
 export const fetchChats = async () => {
   const chatsCol = collection(db, 'chats')
@@ -57,5 +59,20 @@ export const subscribeToChat = (chatId: string, onSubsribe: (chat: IChat) => voi
 export const subscribeToProfile = (id: string, onSubsribe: (user: IUserProfile) => void) => {
   return onSnapshot(doc(db, 'profiles', id), (doc) => {
     onSubsribe(doc.data() as IUserProfile)
+  })
+}
+
+export const sendChatMessage = (message: IMessage, chatId: string) => {
+  const chatRef = doc(db, 'chats', chatId)
+
+  return setDoc(doc(chatRef, 'messages', message.timestamp), message)
+}
+
+export const subscribeToMessages = (chatId: string, onSubsribe: (messages) => void) => {
+  const chatRef = doc(db, 'chats', chatId)
+  const messagesRef = collection(chatRef, 'messages')
+
+  return onSnapshot(query(messagesRef), (doc) => {
+    onSubsribe(doc.docChanges())
   })
 }

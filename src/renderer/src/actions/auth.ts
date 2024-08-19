@@ -2,7 +2,7 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit'
 import * as api from '../api/auth'
 import { IRegisterFormInput } from '@renderer/interfaces/IRegisterFormInput'
 import { IUserProfile } from '@renderer/interfaces/IUserProfile'
-import { AppDispatch } from '@renderer/store'
+import { AppDispatch, RootState } from '@renderer/store'
 import { ILoginFormInput } from '@renderer/interfaces/ILoginFormInput'
 import { clearChatsFulfilled } from './chats'
 
@@ -12,7 +12,7 @@ export const listenToAuthChangesFulfilled = createAction<IUserProfile | null>(
   'auth/listenToAuthChangesFulfilled'
 )
 export const listenToAuthChangesRejected = createAction('auth/listenToAuthChangesRejected')
-export const logoutFulfilled = createAction('auth/logout')
+export const logoutFulfilled = createAction('auth/logoutFulfilled')
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
@@ -40,8 +40,18 @@ export const listenToAuthChanges = () => (dispatch: AppDispatch) => {
   })
 }
 
-export const logout = () => async (dispatch: AppDispatch) => {
+export const logout = () => async (dispatch: AppDispatch, getState: () => RootState) => {
   await api.logout()
+
+  const state = getState()
+  const { messagesSubscriptions } = state.chats
+
+  if (messagesSubscriptions) {
+    Object.keys(messagesSubscriptions).forEach((chatId) => {
+      messagesSubscriptions[chatId]()
+    })
+  }
+
   dispatch(logoutFulfilled())
   dispatch(clearChatsFulfilled())
 }

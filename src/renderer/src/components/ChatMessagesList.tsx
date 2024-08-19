@@ -1,59 +1,42 @@
-export default function ChatMessagesList() {
+import { IMessage } from "@renderer/interfaces/IMessage"
+import { IUserProfile } from "@renderer/interfaces/IUserProfile"
+import { RootState } from "@renderer/store";
+import { formatTimeAgo } from "@renderer/utils/time";
+import { Ref, useCallback } from "react";
+import { useSelector } from "react-redux";
+
+interface IChatMessagesListProps {
+  messages: IMessage[]
+  innerRef: Ref<HTMLUListElement>
+}
+
+export default function ChatMessagesList({ messages = [], innerRef }: IChatMessagesListProps) {
+  const user = useSelector(({auth}: RootState) => auth.user);
+
+  const isAuthorOf = useCallback(message => {
+    return message?.author.id === user?.id ? 'chat-right' : 'chat-left';
+  }, [])
+
   return (
     <div className="chat-container">
-      <ul className="chat-box chatContainerScroll">
-        <li
-          className="chat-left">
-          <div className="chat-avatar">
-            <img
-              src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg" alt="Retail Admin" />
-            <div className="chat-name">Test User 1</div>
-          </div>
-          <div className="chat-text-wrapper">
-            <span className="chat-text">Some message 1</span>
-            <span className="chat-spacer"></span>
-            <div className="chat-hour">5h ago</div>
-          </div>
-        </li>
-        <li
-          className="chat-right">
-          <div className="chat-avatar">
-            <img
-              src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg" alt="Retail Admin" />
-            <div className="chat-name">Test User 2</div>
-          </div>
-          <div className="chat-text-wrapper">
-            <span className="chat-text">Some message 2</span>
-            <span className="chat-spacer"></span>
-            <div className="chat-hour">5h ago</div>
-          </div>
-        </li>
-        <li
-          className="chat-left">
-          <div className="chat-avatar">
-            <img
-              src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg" alt="Retail Admin" />
-            <div className="chat-name">Test User 3</div>
-          </div>
-          <div className="chat-text-wrapper">
-            <span className="chat-text">Some message 3</span>
-            <span className="chat-spacer"></span>
-            <div className="chat-hour">5h ago</div>
-          </div>
-        </li>
-        <li
-          className="chat-right">
-          <div className="chat-avatar">
-            <img
-              src="https://banner2.cleanpng.com/20180627/qvc/kisspng-the-legend-of-zelda-majora-s-mask-discord-compute-discord-icon-5b3371b7b55eb4.6840271215300981037429.jpg" alt="Retail Admin" />
-            <div className="chat-name">Test User 4</div>
-          </div>
-          <div className="chat-text-wrapper">
-            <span className="chat-text">Some message 4</span>
-            <span className="chat-spacer"></span>
-            <div className="chat-hour">5h ago</div>
-          </div>
-        </li>
+      <ul ref={innerRef} className="chat-box chatContainerScroll">
+        { messages.map(message =>
+          <li
+            key={message.id}
+            className={isAuthorOf(message)}>
+            <div className="chat-avatar">
+              <img
+                src={(message?.author as IUserProfile).avatar}
+                alt="Retail Admin" />
+              <div className="chat-name">{(message?.author as IUserProfile).username}</div>
+            </div>
+            <div className="chat-text-wrapper">
+              <span className="chat-text">{message.content}</span>
+              <span className="chat-spacer"></span>
+              <div className="chat-hour">{formatTimeAgo(message.timestamp)}</div>
+            </div>
+          </li>
+        )}
       </ul>
     </div>
   )
