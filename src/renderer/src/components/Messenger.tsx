@@ -1,7 +1,9 @@
+import { IMessage } from '@renderer/interfaces/IMessage';
+import { createTimestamp } from '@renderer/utils/time';
 import { useState } from 'react';
 
 interface MessengerProps {
-  onSubmit: (value: string) => void
+  onSubmit: (data: IMessage) => void
 }
 
 export default function Messenger({ onSubmit }: MessengerProps) {
@@ -10,9 +12,20 @@ export default function Messenger({ onSubmit }: MessengerProps) {
   const onKeyPress = e => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      onSubmit(value);
+      sendMessage();
       setValue('');
     }
+  }
+
+  const sendMessage = () => {
+    if (value.trim() === '') { return; }
+
+    const message = {
+      content: value.trim(),
+      timestamp: createTimestamp()
+    }
+
+    onSubmit(message);
   }
 
   return (

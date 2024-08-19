@@ -9,14 +9,22 @@ import { ISortedChats } from '@renderer/interfaces/ISortedChats'
 import { IChat } from '@renderer/interfaces/IChat'
 import { IActiveChat } from '@renderer/interfaces/IActiveChat'
 import { IUpdateChatUserState } from '@renderer/interfaces/IUpdateChatUserState'
+import { IMessage } from '@renderer/interfaces/IMessage'
+import { ISetMessages } from '@renderer/interfaces/ISetMessages'
+import { IMessageSubscription } from '@renderer/interfaces/IMessageSubscription'
 
 // Common actions
 export const createChatFulfilled = createAction('chat/createChatFulfilled')
 export const joinToChatFulfilled = createAction<IChat>('chat/joinToChatFulfilled')
 export const clearChatsFulfilled = createAction('chat/clearChatsFulfilled')
-export const subscribeToChatFulfilled = createAction<IActiveChat>('chat/setActiveChatFulfilled')
+export const setActiveChatFulfilled = createAction<IActiveChat>('chat/setActiveChatFulfilled')
 export const updateUserStateFulfilled = createAction<IUpdateChatUserState>(
   'chat/updateUserStateFulfilled'
+)
+export const chatMessageSentFulfilled = createAction<IMessage>('chat/chatMessageSentFulfilled')
+export const chatSetMessagesFulfilled = createAction<ISetMessages>('chat/chatSetMessagesFulfilled')
+export const registerMessageSubscription = createAction<IMessageSubscription>(
+  'chat/registerMessageSubscriptionFulfilled'
 )
 
 export const getChats = createAsyncThunk('chat/getChats', async (user: IUserProfile | null) => {
@@ -77,12 +85,52 @@ export const subscribeToChat = (chatId: string) => (dispatch: AppDispatch) => {
       })
     )
 
-    dispatch(subscribeToChatFulfilled({ ...chatParams, joinedUsers }))
+    dispatch(setActiveChatFulfilled({ ...chatParams, joinedUsers }))
   })
 }
 
 export const subscribeToProfile = (id: string, chatId: string) => (dispatch: AppDispatch) => {
   return api.subscribeToProfile(id, async (user) => {
     dispatch(updateUserStateFulfilled({ user, chatId }))
+  })
+}
+
+export const sendChatMessage =
+  (message: IMessage, chatId: string) => (dispatch: AppDispatch, getState) => {
+    const newMessage = { ...message }
+    const { user } = getState().auth
+    const userRef = doc(db, 'profiles', user.id)
+    newMessage.author = userRef.id
+
+    return api
+      .sendChatMessage(newMessage, chatId)
+      .then((_) => dispatch(chatMessageSentFulfilled(newMessage)))
+  }
+
+export const subscribeToMessages = (chatId: string) => (dispatch: AppDispatch) => {
+  return api.subscribeToMessages(chatId, async (changes) => {
+    const chatMessages: IMessage[] = changes.map((change) => {
+      if (change.type === 'added') {
+        return { id: change.doc.id, ...change.doc.data() }
+      }
+    })
+
+    const messagesWithAuthor: IMessage[] = []
+    const cache = {}
+
+    for await (let message of chatMessages) {
+      if (typeof message.author !== 'string' && cache[message.author?.id || '']) {
+        message.author = cache[message.author?.id || '']
+      } else {
+        const userRef = doc(db, 'profiles', message.author as string)
+        const userSnapshot = await getDoc(userRef)
+        cache[userSnapshot.id] = userSnapshot.data()
+        message.author = cache[userSnapshot.id]
+      }
+
+      messagesWithAuthor.push(message)
+    }
+
+    return dispatch(chatSetMessagesFulfilled({ messages: messagesWithAuthor, chatId }))
   })
 }

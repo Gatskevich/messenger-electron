@@ -1,10 +1,11 @@
+import { createTimestamp } from '@renderer/utils/time'
 import db from '../db/firestore'
 import { ref, onValue, getDatabase } from 'firebase/database'
 import { doc, setDoc } from 'firebase/firestore'
 
 const getOnlineStatus = (isOnline: boolean) => ({
   state: isOnline ? 'online' : 'offline',
-  lastChanged: new Date(Date.now()).toISOString()
+  lastChanged: createTimestamp()
 })
 
 export const setUserOnlineStatus = async (userId: string, isOnline: boolean) => {
