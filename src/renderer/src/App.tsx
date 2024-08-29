@@ -17,6 +17,7 @@ import { listenToConnectionChanges } from './actions/app';
 import ChatCreate from './views/ChatCreate';
 import { checkUserConnection } from './actions/connections';
 import { setUserOnlineStatus } from './api/connections';
+import { loadInitialSettings } from './actions/settings';
 
 function AuthRoute({children}) {
   const user = useSelector(({auth}: RootState) => auth.user)
@@ -35,8 +36,11 @@ function App() {
   const isChecking = useSelector(({auth}: RootState) => auth.isChecking)
   const isOnline = useSelector(({app}: RootState) => app.isOnline);
   const user = useSelector(({auth}: RootState) => auth.user);
+  const isDarkTheme  = useSelector(({settings}: RootState) => settings.isDarkTheme);
 
   useEffect(() => {
+    dispatch(loadInitialSettings());
+
     const unsubFromAuth = dispatch(listenToAuthChanges());
     const unsubFromConnection = dispatch(listenToConnectionChanges());
 
@@ -73,7 +77,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div className='content-wrapper'>
+        <div className={`content-wrapper ${isDarkTheme ? 'dark' : 'light'}`}>
           <Routes>
             <Route path="/chatCreate" element={
               <AuthRoute>
