@@ -1,9 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loginUser, logoutFulfilled, registerUser } from '@renderer/actions/auth'
+import { loginUser, registerUser } from '@renderer/actions/auth'
 import { IUserProfile } from '@renderer/interfaces/IUserProfile'
 import { IFirebaseError } from '@renderer/interfaces/IFirebaseError'
 import { IAuth } from '@renderer/interfaces/IAuth'
-import { store } from '@renderer/store'
 
 export interface AuthState {
   user: IUserProfile | null

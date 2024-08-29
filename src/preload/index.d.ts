@@ -6,6 +6,9 @@ declare global {
       notificationApi: {
         sendNotification: (message: string) => void
       }
+      appApi: {
+        quitApp: () => void
+      }
     }
     api: unknown
   }

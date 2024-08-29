@@ -16,6 +16,11 @@ if (process.contextIsolated) {
         sendNotification: (message: string): void => {
           ipcRenderer.send('notify', message)
         }
+      },
+      appApi: {
+        quitApp() {
+          ipcRenderer.send('app-quit')
+        }
       }
     })
     contextBridge.exposeInMainWorld('api', api)

@@ -3,10 +3,13 @@ import Notification from '../../utils/notifications'
 export default (store: any) => (next: any) => (action: any) => {
   switch (action.type) {
     case 'app/listenToConnectionChanges': {
-      Notification.show({
-        title: 'Connection status:',
-        body: action.payload ? 'Online' : 'Offline'
-      })
+      const { showNotifications } = store.getState().settings
+      if (showNotifications) {
+        Notification.show({
+          title: 'Connection status:',
+          body: action.isOnline ? 'Online' : 'Offline'
+        })
+      }
     }
   }
 
