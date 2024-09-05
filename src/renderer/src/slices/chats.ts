@@ -29,7 +29,7 @@ export const chatSlice = createSlice({
   name: 'chat',
   initialState,
   reducers: {
-    createChatFulfilled: (state) => {},
+    createChatFulfilled: () => {},
     joinToChatFulfilled: (state, action) => {
       state.joined = [...state.joined, action.payload]
       state.available = state.available.filter((chat) => chat.id !== action.payload.id)

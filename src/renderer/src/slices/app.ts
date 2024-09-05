@@ -19,7 +19,7 @@ export const appSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(updateSettings, (state, action) => {
+    builder.addCase(updateSettings, (_, action) => {
       const { setting, value } = action.payload
 
       const currentSettings = storage.getItem('app-settings')
